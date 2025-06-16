@@ -1,64 +1,44 @@
-const Header = ({course}) => {
-  return (
-    <>
-     <h1>{course.name}</h1>
-    </>
-    )
-}
+import { useState } from 'react'
 
-const Content = ({course}) => {
-  return (
-    <>
-      <Part part={course.parts[0].name} exercises={course.parts[0].exercises} />
-      <Part part={course.parts[1].name} exercises={course.parts[1].exercises} />
-      <Part part={course.parts[2].name} exercises={course.parts[2].exercises} />
-    </>
-  )
-}
+const Header = ({ text }) => <h1>{text}</h1>
 
-const Part = (props) => {
+const Button = (props) => {
   return (
     <>
-      <p>
-        {props.part} {props.exercises}
-      </p>
-    </>
-  )
-}
-
-const Total = ({ course }) => {
-  return (
-    <>
-      <p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises} </p>
+      <button onClick={props.onClick}>{props.text}</button>
     </>
   )
 }
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const increaseGood = () => {
+    setGood(prevGood => prevGood + 1)
+  }
+
+  const increaseNeutral = () => {
+    setNeutral(prevNeutral => prevNeutral + 1)
+  }
+
+  const increaseBad = () => {
+    setBad(prevBad => prevBad + 1)
   }
 
   return (
-    <div>
-      <Header course={course} />
-      <Content course={course} />
-      <Total course={course} />
-    </div>
+    <>
+      <Header text="give feedback" />
+      <Button text="good" onClick={increaseGood} />
+      <Button text="neutral" onClick={increaseNeutral} />
+      <Button text="bad" onClick={increaseBad} />
+      <Header text="statistics" />
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+    </>
   )
 }
 
