@@ -25,6 +25,27 @@ const Part = ({ part }) => (
   </p>
 );
 
+const Total = ({ course }) => (
+  <p>
+    <strong>
+      total of{" "}
+      {course.parts
+        .map((part) => part.exercises)
+        .reduce((acc, currentValue) => {
+          return acc + currentValue;
+        }, 0)}{" "}
+      exercises
+    </strong>
+  </p>
+);
+//   {
+//   return (
+//     <>
+//       {/* <p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises} </p> */}
+//     </>
+//   )
+// }
+
 const App = () => {
   const course = {
     id: 1,
@@ -48,7 +69,12 @@ const App = () => {
     ],
   };
 
-  return <Course course={course} />;
+  return (
+    <>
+      <Course course={course} />
+      <Total course={course} />
+    </>
+  );
 };
 
 export default App;
