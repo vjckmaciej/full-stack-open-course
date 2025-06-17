@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import PhonebookHeader from "./components/PhonebookHeader";
+import phonebookService from "./services/phonebook";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,6 +10,12 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+
+  useEffect(() => {
+    phonebookService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
+    });
+  }, []);
 
   const addNumber = (event) => {
     event.preventDefault();
@@ -18,9 +25,11 @@ const App = () => {
       alert(newName + " is already added to phonebook");
       return;
     } else {
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewNumber("");
+      phonebookService.create(newPerson).then((returnedNumber) => {
+        setPersons(persons.concat(returnedNumber));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
