@@ -3,6 +3,7 @@ import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import PhonebookHeader from "./components/PhonebookHeader";
 import phonebookService from "./services/phonebook";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -10,6 +11,7 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [createdMessage, setCreatedMessage] = useState(null)
 
   useEffect(() => {
     phonebookService.getAll().then((initialPersons) => {
@@ -42,6 +44,12 @@ const App = () => {
       }
     } else {
       phonebookService.create(newPerson).then((returnedNumber) => {
+        setCreatedMessage(
+          `Added ${newPerson.name}`
+        );
+        setTimeout(() => {
+          setCreatedMessage(null);
+        }, 5000);
         setPersons(persons.concat(returnedNumber));
         setNewName("");
         setNewNumber("");
@@ -74,6 +82,7 @@ const App = () => {
   return (
     <div>
       <PhonebookHeader />
+      <Notification message={createdMessage} />
       <PersonForm
         addNumber={addNumber}
         newName={newName}
