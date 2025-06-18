@@ -12,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [createdMessage, setCreatedMessage] = useState(null)
+  const [messageType, setMessageType] = useState('')
 
   useEffect(() => {
     phonebookService.getAll().then((initialPersons) => {
@@ -40,10 +41,19 @@ const App = () => {
                 person.id === existingPerson.id ? returnedPerson : person
               )
             );
+          })
+          .catch(error => {
+            setMessageType('error')
+            setCreatedMessage(`Information of ${newPerson.name} has already been removed`)
+            setTimeout(() => {
+              setCreatedMessage(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== existingPerson.id))
           });
       }
     } else {
       phonebookService.create(newPerson).then((returnedNumber) => {
+        setMessageType('success')
         setCreatedMessage(
           `Added ${newPerson.name}`
         );
@@ -82,7 +92,7 @@ const App = () => {
   return (
     <div>
       <PhonebookHeader />
-      <Notification message={createdMessage} />
+      <Notification message={createdMessage} type={messageType} />
       <PersonForm
         addNumber={addNumber}
         newName={newName}
